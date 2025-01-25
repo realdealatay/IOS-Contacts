@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Pop-up</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif; /* Adjust font to match the picture */
+            background-color: #f0f0f0; /* Replace with the picture's background color */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .popup {
+            position: relative;
+            background: #000; /* Background of the pop-up */
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow around the box */
+            border-radius: 12px; /* Adjust based on the picture */
+            width: 320px; /* Adjust size to match the original */
+            text-align: center;
+        }
+        .popup-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-picture {
+            width: 80px; /* Adjust size */
+            height: 80px;
+            background-color: #969aa6; /* Replace with the color of the profile circle */
+            color: #ffffff;
+            font-size: 36px; /* Adjust font size */
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            margin-bottom: 10px; /* Space between profile picture and name */
+        }
+        .popup-header h2 {
+            margin: 0;
+            font-size: 22px; /* Adjust font size */
+            color: #fff; /* Text color for the name */
+        }
+        .popup-content {
+            color: #fff; /* Adjust text color */
+            font-size: 16px; /* Match text size */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px; /* Space between the fields */
+        }
+        .popup-content div {
+            background-color: #1c1c1e;
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            text-align: left; /* Align content inside boxes to the left */
+        }
+        .popup-content div span {
+            font-weight: bold;
+            font-size: 12px; /* Smaller title */
+            margin-bottom: 5px;
+            color: white; /* Title color */
+        }
+        .popup-content div p {
+            font-size: 18px; /* Bigger data size */
+            color: #0b84fe; /* Data color */
+            margin: 0;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px; /* Adjust position based on picture */
+            right: 310px;
+            background: none;
+            border: none;
+            font-size: 35px;
+            color: #666666; /* Close button color */
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #000000; /* Darker hover effect */
+        }
+    </style>
+</head>
+<body>
+    <div class="popup">
+        <button class="close-btn" onclick="closePopup()">×</button>
+        <div class="popup-header">
+            <div class="profile-picture">A</div>
+            <h2>Atay Karaoglu</h2>
+        </div>
+        <div class="popup-content">
+            <div>
+                <span>mobile</span>
+                <p>+90 541 831 48 54</p>
+            </div>
+            <div>
+                <span>mail</span>
+                <p>ataykaraoglu@gmail.com</p>
+            </div>
+            <div>
+                <span>birthday</span>
+                <p>June 13, 2007</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function closePopup() {
+            document.querySelector('.popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+
+
