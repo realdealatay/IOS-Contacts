@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Friends+Ultra&display=swap" rel="stylesheet">
+  <title>Carnet de Contacts</title>
+
+  <!-- Lien vers Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Lien vers Font Awesome pour les icônes -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <link href="https://fonts.cdnfonts.com/css/antipasto-pro" rel="stylesheet">
+
+  <!-- Style personnalisé -->
+  <style>
+    body {
+      overflow-y: scroll /* Always show scrollbar */
+  }
+
+  /* Dark mode styles for the modal */
+.dark-mode .modal-content {
+    background-color: #1c1c1e; /* Dark background for the modal */
+    color: #ffffff; /* Light text for the modal content */
+    border: 1px solid #333; /* Border to separate modal */
+}
+
+.dark-mode .modal-header {
+    background-color: #2c2c2c; /* Darker background for the header */
+    border-bottom: 1px solid #444; /* Add a border for separation */
+}
+
+.dark-mode .modal-footer {
+    background-color: #2c2c2c; /* Darker footer background */
+    border-top: 1px solid #444; /* Add a border for separation */
+}
+
+.dark-mode .form-control {
+    background-color: #2c2c2c; /* Dark input fields */
+    color: #ffffff; /* Light text in inputs */
+    border: 1px solid #555; /* Border for inputs */
+}
+
+.dark-mode .form-control::placeholder {
+    color: #bbb; /* Placeholder text color */
+}
+
+.dark-mode #contactPopupModal .modal-content {
+    background: #2b2b2b; /* Dark gray for modal background */
+    color: #ffffff; /* White text for readability */
+    border-radius: 12px;
+    border: none; /* Clean appearance */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Softer shadow for depth */
+}
+
+.dark-mode #contactEditPopupModal .modal-content {
+    background: #2b2b2b; /* Dark gray for modal background */
+    color: #ffffff; /* White text for readability */
+    border-radius: 12px;
+    border: none; /* Clean appearance */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Softer shadow for depth */
+}
+
+.btn-close-custom {
+  font-size: 25px;
+  background: #ffffff;
+  width: 32px; /* Make the button a circle */
+  height: 32px;
+  display: flex;                 /* Use flexbox for centering */     /* Center the X horizontally */
+  align-items: center; 
+  border-radius: 2em;
+  border: none;
+  color: #0b84fe;
+  position: absolute;
+  top: 10px; /* Align with modal padding */
+  left: 10px; /* Align with modal padding */
+  cursor: pointer;
+  z-index: 1051; /* Ensure it's above the modal content */
+  transition: transform 0.2s ease, color 0.2s ease; /* Hover effects */
+}
+.btn-close-custom::before {
+  content: "<";                   /* Use X as content */
+  position: absolute;             /* Position absolutely inside the button */
+  top: 43%;                       /* Vertically center */
+  left: 47%;                      /* Horizontally center */
+  transform: translate(-50%, -50%); /* Offset by half the button size to truly center */
+}
+
+.btn-save-custom {
+  font-size: 19px;
+  background: #ffffff;
+  width: 55px; /* Make the button a circle */
+  height: 32px;
+  display: flex;                 /* Use flexbox for centering */     /* Center the X horizontally */
+  align-items: center; 
+  border-radius: 9999px;
+  border: 2px;
+  color: #0b84fe;
+  position: absolute;
+  top: 10px; /* Align with modal padding */
+  left: 10px; /* Align with modal padding */
+  cursor: pointer;
+  z-index: 1051; /* Ensure it's above the modal content */
+  transition: transform 0.2s ease, color 0.2s ease; /* Hover effects */
+}
+.btn-save-custom::before {
+  content: "Save";                   /* Use X as content */
+  position: absolute;             /* Position absolutely inside the button */
+  top: 43%;                       /* Vertically center */
+  left: 47%;                      /* Horizontally center */
+  transform: translate(-50%, -50%); /* Offset by half the button size to truly center */
+}
+.btn-save-custom:hover {
+  background: #969aa6;
+}
+
+.btn-close-custom:hover {
+  background: #969aa6;
+}
+/* Dark mode styles */
+.dark-mode .btn-save-custom {
+  color: #ffffff;
+  background: #3a3a3a;
+}
+
+.dark-mode .btn-save-custom:hover {
+  background: #969aa6;
+}
+
+/* Dark mode styles */
+.dark-mode .btn-close-custom {
+  color: #ffffff;
+  background: #3a3a3a;
+}
+
+.dark-mode .btn-close-custom:hover {
+  background: #969aa6;
+}
+
+.btn-edit-custom {
+  font-size: 18px;
+  background: #ffffff;
+  width: 55px; /* Make the button a circle */
+  height: 32px;
+  border-radius: 9999px;
+  border: 2px;
+  color: #0b84fe;
+  position: absolute;
+  top: 10px; /* Align with modal padding */
+  left: 435px; /* Align with modal padding */
+  cursor: pointer;
+  z-index: 1051; /* Ensure it's above the modal content */
+  transition: transform 0.2s ease, color 0.2s ease; /* Hover effects */
+}
+
+.btn-edit-custom:hover {
+  background: #969aa6;
+}
+
+/* Dark mode styles */
+.dark-mode .btn-edit-custom {
+  color: #ffffff;
+  background: #3a3a3a;
+}
+
+.dark-mode .btn-edit-custom:hover {
+  background: #969aa6;
+}
+  /* Dark mode styles */
+  .dark-mode {
+      background: #121212; /* Dark background */
+      color: #ffffff; /* Light text */
+  }
+
+  .contacts-title {
+    font-size: 2.5rem; /* Make "Contacts" bigger */
+    margin-top: 3rem; /* Add more spacing above "Contacts" */
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .contact-name {
+    font-size: 1.5rem; /* Increase the font size of contact names */
+    font-weight: 600; /* Make them bold for emphasis */
+  }
+
+  .contact-phone {
+    display: none; /* Hides phone numbers */
+  }
+  
+  .dark-mode .navbar {
+      background-color: #1c1c1e; /* Dark navbar */
+  }
+
+  .dark-mode .form-control {
+      background-color: #2c2c2c;
+      color: #ffffff;
+      border: 1px solid #555;
+  }
+  .dark-mode #contactPopupModal .modal-content {
+    background: #1e1e1e; /* Dark background */
+    border-radius: 12px;
+    color: #ffffff; /* Light text color */
+    border: 1px solid #333; /* Subtle border */
+  }
+
+  /* Liste des contacts */
+  .contact-list {
+      padding: 0;
+      list-style: none;
+      margin-top: 20px;
+  }
+
+  .contact-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 10px;
+      border-bottom: 1px solid #ddd; /* Ligne fine entre les contacts */
+  }
+
+  .contact-list li:last-child {
+      border-bottom: none; /* Pas de ligne après le dernier contact */
+  }
+
+  /* Styles des noms et numéros */
+  .contact-name,
+  .contact-phone {
+      color: #333;
+  }
+
+  /* En mode sombre */
+  .dark-mode .contact-list li {
+      border-bottom: 1px solid #444; /* Ligne fine sombre */
+  }
+
+  .dark-mode .contact-name,
+  .dark-mode .contact-phone {
+      color: #fff;
+  }
+
+  /* Boutons d'action (Éditer, Supprimer) */
+  .action-buttons a {
+      margin-left: 10px;
+      text-decoration: none;
+  }
+
+  /* Hover sur les boutons */
+  .action-buttons a:hover {
+      color: #0056b3;
+  }
+
+  /* Ajuster la barre de recherche */
+  .search-container {
+      position: relative;
+      width: 79vw; /* Takes full width of the container */
+      margin-top: 20px;
+  }
+
+  input#search {
+      background-color: #fff; /* Fond blanc en mode clair */
+      color: #333; /* Couleur du texte en mode clair */
+      border: 1px solid #ccc; /* Bordure claire */
+      width: 100%; /* Make sure it takes full container width */
+      padding-left: 30px; /* To make space for the icon */
+  }
+
+  .dark-mode input#search {
+      background-color: #2c2c2c; /* Fond sombre pour la barre de recherche */
+      color: #fff; /* Couleur du texte en mode sombre */
+      border: 1px solid #555; /* Bordure sombre pour s'adapter au thème */
+  }
+
+  /* Bouton + aligné à l'extérieur de la barre de recherche */
+  .search-container .btn-plus {
+    position: absolute;
+    top: 50%;
+    right: -25px; /* Position the button outside the search bar */
+    transform: translateY(-50%); /* Vertically center the button */
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    padding: 1px 10px;
+}
+  .profile-picture {
+    width: 80px;
+    height: 80px;
+    background-color: #969aa6;
+    color: #fff;
+    font-size: 46px;
+    font-weight: 550;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    font-family: 'Antipasto Pro', sans-serif;
+    padding-top: 8px;
+}
+
+.dark-mode .profile-picture {
+    width: 80px;
+    height: 80px;
+    background-color: #969aa6;
+    color: #fff;
+    font-size: 46px;
+    font-weight: 550;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    font-family: 'Antipasto Pro', sans-serif;
+    padding-top: 8px;
+}
+
+  .search-container .btn-plus i {
+    color: #007bff !important; /* Keep the icon blue */
+    font-size: inherit; /* Ensure it inherits size from the button */
+  }
+  /* Alignement de l'icône de recherche */
+  .search-container i {
+      position: absolute;
+      top: 50%;
+      left: 10px; /* Espacement à gauche */
+      transform: translateY(-50%);
+      color: #aaa; /* Couleur de l'icône */
+  }
+
+/* Hover effect for the + button */
+.search-container .btn-plus:hover {
+    color: #0056b3; /* Darker blue when hovering */
+}
+
+/* Remove any overriding dark mode styles */
+.dark-mode .btn-plus {
+    color: #007bff !important; /* Ensure it stays the same color in dark mode */
+}
+
+.dark-mode .btn-plus:hover {
+    color: #0056b3; /* Ensure hover color remains consistent in dark mode */
+}
+  .dark-mode ::placeholder {
+      color: #bbb; /* Couleur du texte placeholder clair en mode sombre */
+  }
+
+  /* Light mode styles */
+.modal-content-light {
+  background: #f2f1f6;
+  border-radius: 12px;
+  color: #000000;
+}
+
+.contact-info {
+  background-color: #ffffff;
+  border-radius: 8px;
+  color: #000000;
+  text-align: left;
+  font-size: 18px
+}
+
+.contact-info-edit {
+  background-color: #ffffff;
+  color: #000000;
+  text-align: left;
+  font-size: 18px;
+  padding: 8px 0;
+  border-bottom: 1px solid #2b2b2b;
+  ;
+}
+
+
+/* Dark mode styles */
+.dark-mode .modal-content {
+  background: #2b2b2b;
+  border-radius: 12px;
+  color: #ffffff;
+}
+
+.dark-mode .contact-info {
+  background-color: #3a3a3a;
+  color: #ffffff;
+}
+
+.dark-mode .contact-info-edit {
+  background-color: #3a3a3a;
+  color: #ffffff;
+}
+
+
+
+  </style>      
+</head>
+<body>
+
+  <!-- Barre de navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Carnet Personnel</a>
+      <button id="darkModeToggle" class="btn btn-outline-light ms-auto">🌙 Dark Mode</button>
+    </div>
+  </nav>
+
+  <!-- Section principale -->
+  <div class="container mt-search">
+    <h2 class="contacts-title">Contacts</h2>
+
+    <!-- Formulaire de recherche -->
+    <div class="search-container mt-4">
+      <form class="mb-4" id="searchForm">
+        <div class="position-relative">
+          <i class="fas fa-magnifying-glass"></i>
+          <input type="text" class="form-control" id="search" placeholder="Search a contact...">
+        </div>
+      </form>
+
+      <!-- Bouton "+" pour ouvrir le modal d'ajout -->
+      <button type="button" class="btn btn-plus" data-bs-toggle="modal" data-bs-target="#addContactModal">
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
+
+    <!-- Liste des contacts -->
+    <ul class="contact-list" id="contactsList">
+      {% if contacts %}
+        {% for contact in contacts %}
+          <li>
+            <div>
+              <!-- Make the name clickable and pass data attributes for the contact -->
+              <span class="contact-name" 
+                    data-id="{{ contact['id'] }}"
+                    data-name="{{ contact['name'] }}"
+                    data-phone="{{ contact['phone_number'] }}"
+                    data-email="{{ contact['email'] }}"
+                    data-birthday="{{ contact['birthday'] }}"
+                    style="cursor: pointer;">
+                {{ contact['name'] }}
+              </span>
+              <span class="contact-phone">{{ contact['phone_number'] }}</span>
+            </div>
+            <div class="action-buttons">
+              <a href="{{ url_for('delete_contact', id=contact['id']) }}" class="fa-solid fa-trash-can" style="color: #ff0000;"></a>
+            </div>
+          </li>
+        {% endfor %}
+      {% else %}
+        <li class="text-center">Aucun contact disponible.</li>
+      {% endif %}
+    </ul>
+
+  </div>
+  <div class="modal fade" id="contactPopupModal" tabindex="-1" aria-labelledby="contactPopupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-content-light">
+        <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-edit-custom" data-bs-target="#contactEditPopupModal" data-bs-toggle="modal">Edit</button>
+        <div class="modal-body text-center">
+          <div class="popup-header">
+            <div class="profile-picture mx-auto" id="contactPic">A</div>
+            <h2 id="contactName">Atay Karaoglu</h2>
+          </div>
+          <div class="popup-content mt-4" style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+            <div class="w-100 p-3 contact-info">
+              <span>Mobile</span>
+              <p style="font-size: 18px; color: #0b84fe; margin: 0;" id="contactPhone">+90 541 831 48 54</p>
+            </div>
+            <div class="w-100 p-3 contact-info">
+              <span>Mail</span>
+              <p style="font-size: 18px; color: #0b84fe; margin: 0;" id="contactEmail">ataykaraoglu@gmail.com</p>
+            </div>
+            <div class="w-100 p-3 contact-info">
+              <span>Birthday</span>
+              <p style="font-size: 18px; color: #0b84fe; margin: 0;" id="contactBirthday">June 13, 2007</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="contactEditPopupModal" tabindex="-1" aria-labelledby="contactEditPopupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-light">
+            <form id="editContactForm" method="POST">
+                <input type="hidden" id="contactId" name="contactId"> <!-- Hidden input for contact ID -->
+                <button type="submit" class="btn-save-custom" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body text-center">
+                    <div class="popup-header">
+                        <div class="profile-picture mx-auto" id="contactPic">A</div>
+                        <h2 id="contactName" contenteditable="true">Atay Karaoglu</h2>
+                    </div>
+                    <div class="popup-content mt-4" style="display: flex; flex-direction: column; align-items: center;">
+                        <div class="w-100 p-3 contact-info-edit">
+                            <p style="font-size: 18px; color: #0b84fe; margin: 0;" id="contactPhone" contenteditable="true">+90 541 831 48 54</p>
+                        </div>
+                        <div class="w-100 p-3 contact-info-edit">
+                            <p style="font-size: 18px; color: #0b84fe; margin: 0;" id="contactEmail" contenteditable="true">ataykaraoglu@gmail.com</p>
+                        </div>
+                        <div class="w-100 p-3 contact-info-edit">
+                            <p style="font-size: 18px; color: #0b84fe; margin: 0;" id="contactBirthday" contenteditable="true">June 13, 2007</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+  <!-- Modal pour ajouter un contact -->
+  <div class="modal fade" id="addContactModal" tabindex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addContactModalLabel">Ajouter un contact</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="/" method="POST" id="addContactForm">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nom</label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Entrez le nom du contact" required>
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">Numéro de téléphone</label>
+              <input type="text" class="form-control" id="phone" name="phone" placeholder="Entrez le numéro" required>
+              <small class="text-danger" id="phoneError"></small>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="text" class="form-control" id="email" name="email" placeholder="Entrez le email" required>
+              <small class="text-danger" id="emailError"></small>
+            </div>
+            <div class="mb-3">
+              <label for="birthday" class="form-label">Date de naissance</label>
+              <input type="text" class="form-control" id="birthday" name="birthday" placeholder="Entrez la date de naissance (YYYY-MM-DD)" required>
+              <small class="text-danger" id="birthdayError"></small>
+            </div>
+            <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Ajouter</button>
+          </form>          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lien vers Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Dark Mode Toggle Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Check if dark mode is enabled
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+      document.getElementById('darkModeToggle').textContent = '☀️ Light Mode';
+    }
+
+    // Toggle dark mode on button click
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    darkModeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', isDark ? 'true' : 'false');
+      document.getElementById('darkModeToggle').textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+  });
+</script>
+
+<!-- Contact Search Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById("search");
+    const contactsList = document.getElementById("contactsList");
+
+    // Event listener for input in the search bar
+    searchInput.addEventListener("input", function() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const contacts = contactsList.getElementsByTagName("li");
+
+      // Loop through each contact item
+      Array.from(contacts).forEach(function(contact) {
+        const contactName = contact.querySelector(".contact-name").textContent.toLowerCase();
+        const contactPhone = contact.querySelector(".contact-phone").textContent.toLowerCase();
+
+        // Check if the search term matches the contact's name or phone number
+        if (contactName.includes(searchTerm) || contactPhone.includes(searchTerm)) {
+          contact.style.display = ""; // Show contact
+        } else {
+          contact.style.display = "none"; // Hide contact
+        }
+      });
+    });
+  });
+</script>
+
+<!-- Contact Modal Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const contacts = document.querySelectorAll('.contact-name');
+    const contactEditModal = document.getElementById('contactEditPopupModal');
+    const contactPopupModal = document.getElementById('contactPopupModal');
+    const editContactForm = document.getElementById('editContactForm');
+
+    // Update elements inside the Edit Modal
+    const editPhone = contactEditModal.querySelector('#contactPhone');
+    const editEmail = contactEditModal.querySelector('#contactEmail');
+    const editBirthday = contactEditModal.querySelector('#contactBirthday');
+    const editName = contactEditModal.querySelector('#contactName');
+
+    // Update elements inside the View Modal
+    const viewPhone = contactPopupModal.querySelector('#contactPhone');
+    const viewEmail = contactPopupModal.querySelector('#contactEmail');
+    const viewBirthday = contactPopupModal.querySelector('#contactBirthday');
+    const viewName = contactPopupModal.querySelector('#contactName');
+
+    let selectedContactId = null; // Store the ID of the clicked contact
+
+    // Add event listener to each contact name
+    contacts.forEach(contact => {
+      contact.addEventListener('click', () => {
+        const name = contact.getAttribute('data-name');
+        const phone = contact.getAttribute('data-phone');
+        const email = contact.getAttribute('data-email');
+        const birthday = contact.getAttribute('data-birthday');
+        selectedContactId = contact.getAttribute('data-id'); // Store contact ID
+
+        // Function to get the initial of the first name
+        function getInitial(name) {
+          const firstName = name.split(" ")[0]; // Get the first word (first name)
+          return firstName.charAt(0).toUpperCase(); // Get the first letter of the first name and capitalize it
+        }
+
+        // Update View Modal
+        viewName.textContent = name;
+        viewPhone.textContent = phone;
+        viewEmail.textContent = email;
+        viewBirthday.textContent = birthday;
+
+        // Update Edit Modal
+        editName.textContent = name;
+        editPhone.textContent = phone;
+        editEmail.textContent = email;
+        editBirthday.textContent = birthday;
+
+        // Get the first initial of the name
+        const initial = getInitial(name);
+
+        // Update the profile picture with the initial
+        const profilePicture = document.querySelector('#contactPopupModal .profile-picture');
+        profilePicture.textContent = initial;  // Set the initial as the content of the div
+
+        const EditprofilePicture = document.querySelector('#contactEditPopupModal .profile-picture');
+        EditprofilePicture.textContent = initial;  // Set the initial as the content of the div
+
+        // Dynamically update the form's action attribute
+        editContactForm.setAttribute("action", `/edit/${selectedContactId}`);
+        console.log(`Form action updated to: /edit/${selectedContactId}`);
+
+        // Show the View Modal
+        const bootstrapModal = new bootstrap.Modal(contactPopupModal);
+        bootstrapModal.show();
+      });
+    });
+  });
+</script>
+
+<!-- Contact Edit Form Submission Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const editContactForm = document.getElementById('editContactForm');
+
+    // Handle form submission
+    editContactForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // Retrieve the edited values from contenteditable fields
+      const updatedName = document.getElementById("contactName").textContent; // Use textContent for contenteditable
+      const updatedPhone = document.getElementById("contactPhone").textContent; // Use textContent for contenteditable
+      const updatedEmail = document.getElementById("contactEmail").textContent; // Use textContent for contenteditable
+      const updatedBirthday = document.getElementById("contactBirthday").textContent; // Use textContent for contenteditable
+
+      // Manually set form data to the edited values
+      const formData = new FormData(editContactForm);
+      formData.set("name", updatedName);       // Manually set name
+      formData.set("phone", updatedPhone);     // Manually set phone
+      formData.set("email", updatedEmail);     // Manually set email
+      formData.set("birthday", updatedBirthday); // Manually set birthday
+
+      // Send the form data to the backend
+      fetch(editContactForm.action, {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert("Contact updated successfully!");
+          window.location.reload(); // Reload the page to reflect the changes
+        } else {
+          alert("Error updating contact.");
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert("There was an error processing the request.");
+      });
+    });
+  });
+
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("addContactForm");
+    const phoneField = document.getElementById("phone");
+    const emailField = document.getElementById("email");
+    const birthdayField = document.getElementById("birthday");
+
+    const phoneError = document.getElementById("phoneError");
+    const emailError = document.getElementById("emailError");
+    const birthdayError = document.getElementById("birthdayError");
+
+    form.addEventListener("submit", function (e) {
+      let isValid = true;
+
+      // Reset errors
+      phoneError.textContent = "";
+      emailError.textContent = "";
+      birthdayError.textContent = "";
+
+      // Validate phone number
+      const phoneRegex = /^\+?[0-9]{10,15}$/; // Allows + and 10-15 digits
+      if (!phoneRegex.test(phoneField.value)) {
+        isValid = false;
+        phoneError.textContent = "Veuillez entrer un numéro de téléphone valide.";
+      }
+
+      // Validate email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailField.value)) {
+        isValid = false;
+        emailError.textContent = "Veuillez entrer une adresse email valide.";
+      }
+
+      // Validate birthday
+      const birthdayRegex = /^\d{4}-\d{2}-\d{2}$/; // Format YYYY-MM-DD
+      const date = new Date(birthdayField.value);
+      if (!birthdayRegex.test(birthdayField.value) || isNaN(date.getTime())) {
+        isValid = false;
+        birthdayError.textContent = "Veuillez entrer une date de naissance valide (YYYY-MM-DD).";
+      }
+
+      // Prevent form submission if any validation fails
+      if (!isValid) {
+        e.preventDefault();
+      }
+    });
+  });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+/* Style global */
+body {
+    background: linear-gradient(135deg, #74b9ff, #a29bfe);
+    color: #2d3436;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Titre de la page */
+  h2 {
+    color: #2d3436;
+  }
+  
+  /* Style des boutons */
+  .btn {
+    margin-right: 5px;
+  }
+  
+  /* Formulaire */
+  form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Formulaire - Input */
+  input[type="text"] {
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  /* Tableau */
+  .table {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%
+  }
+  
+  .table th, .table td {
+    text-align: center;
+  }
+
+    /* Par défaut, en mode clair */
+  input#search {
+    background-color: #fff; /* Fond blanc en mode clair */
+    color: #333; /* Couleur du texte en mode clair */
+    border: 1px solid #ccc; /* Bordure claire */
+  }
+
+  /* En mode sombre */
+  .dark-mode input#search {
+    background-color: #2c2c2c; /* Fond sombre pour la barre de recherche */
+    color: #fff; /* Couleur du texte en mode sombre */
+    border: 1px solid #555; /* Bordure sombre pour s'adapter au thème */
+  }
+
+  /* Couleur du placeholder en mode sombre */
+  .dark-mode ::placeholder {
+    color: #bbb; /* Couleur du texte placeholder clair en mode sombre */
+  }
+
+  
